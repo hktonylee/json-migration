@@ -8,70 +8,70 @@ Example
 
 Config Version 1 (`user.json`)
 
-	```json
-	{
-	    "id": 5,
-	    "full_name": "Harmony Kim",
-	    "age": 26,
-	}
-	```
+```json
+{
+    "id": 5,
+    "full_name": "Harmony Kim",
+    "age": 26,
+}
+```
 
 Config Version 2 (`user-v2.json`)
 
-	```json
-	{
-	    "id": "5",
-	    "version": 2,
-	    "first_name": "Harmony",
-	    "last_name": "Kim",
-	    "age": 26
-	}
-	```
+```json
+{
+    "id": "5",
+    "version": 2,
+    "first_name": "Harmony",
+    "last_name": "Kim",
+    "age": 26
+}
+```
 
 Config Version 3 (`user-v3.json`)
 
-	```json
-	{
-	    "id": "5",
-	    "version": 3,
-	    "first_name": "Harmony",
-	    "last_name": "Kim",
-	    "email": "some@email.com"
-	}
-	```
+```json
+{
+    "id": "5",
+    "version": 3,
+    "first_name": "Harmony",
+    "last_name": "Kim",
+    "email": "some@email.com"
+}
+```
 
 
 Migration Plan `migration.js`
 
-	```javascript
-	[
-	    {
-	        from: null,
-	        to: {version: 2},
-	        mapping: {
-	            "id": T.Convert("id", "string"),
-	            "first_name": T.Rename("full_name"),
-	            "last_name": null
-	        }
-	    },
-	    {
-	        from: {version: 2},
-	        to: {version: 3},
-	        mapping: {
-	            "email": null,    // for old config, set to null as default value
-	            "age": T.Drop(),  // remove the key-value pair
-	        }
-	    }
-	]
-	```
+```javascript
+[
+    {
+        from: null,
+        to: {version: 2},
+        mapping: {
+            "id": T.Convert("id", "string"),
+            "first_name": T.Rename("full_name"),
+            "last_name": null
+        }
+    },
+    {
+        from: {version: 2},
+        to: {version: 3},
+        mapping: {
+            "email": null,    // for old config, set to null as default value
+            "age": T.Drop(),  // remove the key-value pair
+        }
+    }
+]
+```
 
 Then you can load the config in latest format no matter what version the config is.
 
-	```objectivec
-	// Objective-C
-	NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
-	                                          migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
-	```
+```objectivec
+// Objective-C
+NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+                                          migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+```
 
 Features
 ========
