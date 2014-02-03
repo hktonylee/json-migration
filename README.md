@@ -8,14 +8,17 @@ Example
 
 Config Version 1 (`user.json`)
 
+	```json
 	{
 	    "id": 5,
 	    "full_name": "Harmony Kim",
 	    "age": 26,
 	}
+	```
 
 Config Version 2 (`user-v2.json`)
 
+	```json
 	{
 	    "id": "5",
 	    "version": 2,
@@ -23,9 +26,11 @@ Config Version 2 (`user-v2.json`)
 	    "last_name": "Kim",
 	    "age": 26
 	}
+	```
 
 Config Version 3 (`user-v3.json`)
 
+	```json
 	{
 	    "id": "5",
 	    "version": 3,
@@ -33,10 +38,12 @@ Config Version 3 (`user-v3.json`)
 	    "last_name": "Kim",
 	    "email": "some@email.com"
 	}
+	```
 
 
 Migration Plan `migration.js`
 
+	```javascript
 	[
 	    {
 	        from: null,
@@ -56,12 +63,15 @@ Migration Plan `migration.js`
 	        }
 	    }
 	]
+	```
 
 Then you can load the config in latest format no matter what version the config is.
 
+	```objectivec
 	// Objective-C
 	NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
 	                                          migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+	```
 
 Features
 ========
