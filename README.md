@@ -104,9 +104,23 @@ Features
 	        from: null,
 	        to: {"version": 3},
 	        mapping: {
-	            "emails": T.Convert("email", "array")
+	            // ...
 	        }
 	    }
+
+* You can use different method to determine the version.
+
+		{
+	        from: {"v": "2"},
+	        to: {"version": 3}
+	    }
+
+	or even...
+	
+		{
+			from: {"v1": function (json) { return "full_name" in json; },
+			to: {"version": 2}
+		}
 
 * Multilingual ;-)
 
@@ -193,7 +207,7 @@ TODO
 ====
 
 - implement everything ;-)
-- 
+
 
 
 
