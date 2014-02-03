@@ -130,7 +130,7 @@ Features
 
 	```js
 	{
-	        from: {"v": "2"},
+        from: {"v": "2"},
         to: {"version": 3}
     }
     ```
@@ -180,8 +180,8 @@ Features
 
 * It supports nested array migration.
 
+	Old version config
 	```json
-	// old example.json
 	[
 		{
 			"name": "Thomas",
@@ -199,8 +199,8 @@ Features
 	]
 	```
 	
+	New version config
 	```json
-	// new example.json
 	[
 		{
 			"name": "Thomas",
