@@ -78,139 +78,161 @@ Features
 
 * It supports default value for newly added key-value pair.
 
-	    {
-	        from: {"version": 2},
-	        to: {"version": 3},
-	        mapping: {
-	            "new_key": "any default value you like"
-	        }
-	    }
-    
+    ```js
+    {
+        from: {"version": 2},
+        to: {"version": 3},
+        mapping: {
+            "new_key": "any default value you like"
+        }
+    }
+    ```
+   
 * It supports inline transformation in Javascript.
 
-		{
-	        from: {"version": 2},
-	        to: {"version": 3},
-	        mapping: {
-	            ""new_name": function (o) {
-	            	return "name_" + o.toUpperCase();
-	            }
-	        }
-	    }
+	```js
+	{
+        from: {"version": 2},
+        to: {"version": 3},
+        mapping: {
+            ""new_name": function (o) {
+            	return "name_" + o.toUpperCase();
+            }
+        }
+    }
+    ```
 
 * It supports array migration.
 
-		{
-	        from: {"version": 2},
-	        to: {"version": 3},
-	        mapping: {
-	            "emails": T.Convert("email", "array")
-	        }
-	    }
+	```js
+	{
+        from: {"version": 2},
+        to: {"version": 3},
+        mapping: {
+            "emails": T.Convert("email", "array")
+        }
+    }
+    ```
 
 * You can add `version` field in later version. So that you can use this library on older projects.
 
-		{
-	        from: null,
-	        to: {"version": 3},
-	        mapping: {
-	            // ...
-	        }
-	    }
+	```js
+	{
+        from: null,
+        to: {"version": 3},
+        mapping: {
+            // ...
+        }
+    }
+    ```
 
 * You can use different method to determine the version.
 
-		{
+	```js
+	{
 	        from: {"v": "2"},
-	        to: {"version": 3}
-	    }
+        to: {"version": 3}
+    }
+    ```
 
 	or even...
 	
-		{
-			from: {"v1": function (json) { return "full_name" in json; },
-			to: {"version": 2}
-		}
+	```js
+	{
+		from: {"v1": function (json) { return "full_name" in json; },
+		to: {"version": 2}
+	}
+	```
 
 * Multilingual ;-)
 
-		// Objective-C
-		NSDictionary *newJSONConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
-		                                             migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+	```js
+	// Objective-C
+	NSDictionary *newJSONConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+	                                             migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
 
-		// Javascript
-		var newJSON = JCReader.read(oldJSONContent, migrationPlan);
+	// Javascript
+	var newJSON = JCReader.read(oldJSONContent, migrationPlan);
+	```
 
 
 * It supports identity transform (do nothing).
 
-		{
-	        from: {"version": 2},
-	        to: {"version": 3},
-	    }
+	```js
+	{
+        from: {"version": 2},
+        to: {"version": 3},
+    }
+    ```
 
 * It can prevent the new config from inheriting old value.
 
-		{
-			from: {"version": 2},
-	        to: {"version": 3},
-	        inheritItems: false,   // default: true
-	        mapping: {
-	            // ...
-	        }
-	    }
+	```js
+	{
+		from: {"version": 2},
+        to: {"version": 3},
+        inheritItems: false,   // default: true
+        mapping: {
+            // ...
+        }
+    }
+    ```
 
 * It supports nested array migration.
 
-		// old example.json
-		[
-			{
-				"name": "Thomas",
-				"borrowed_movie_list": [
-					{
-						"id": 5311,
-						"name": "500 Days of Summer"
-					},
-					{
-						"id": 8812,
-						"name": "Inception"
-					}
-				]
-			}
-		]
-		
-		// new example.json
-		[
-			{
-				"name": "Thomas",
-				"borrowed_items": [
-					{
-						"id": 5311,
-						"title": "500 Days of Summer",
-						"type": "movie"
-					},
-					{
-						"id": 8812,
-						"title": "Inception"
-						"type": "movie"
-					}
-				]
-			}
-		]
-
-		// migration.js
+	```json
+	// old example.json
+	[
 		{
-			from: {"version": 2},
-	        to: {"version": 3},
-	        mapping: {
-	            "*.borrowed_items": T.Nested("*.borrowed_movie_list", {
-	            	"*.type": "movie",
-	            	"*.title": T.Rename("*.name")
-	            })
-	        }
-	    }
-
-
+			"name": "Thomas",
+			"borrowed_movie_list": [
+				{
+					"id": 5311,
+					"name": "500 Days of Summer"
+				},
+				{
+					"id": 8812,
+					"name": "Inception"
+				}
+			]
+		}
+	]
+	```
+	
+	```json
+	// new example.json
+	[
+		{
+			"name": "Thomas",
+			"borrowed_items": [
+				{
+					"id": 5311,
+					"title": "500 Days of Summer",
+					"type": "movie"
+				},
+				{
+					"id": 8812,
+					"title": "Inception"
+					"type": "movie"
+				}
+			]
+		}
+	]
+	```
+	
+	```js
+	// migration.js
+	{
+		from: {"version": 2},
+        to: {"version": 3},
+        mapping: {
+            "*.borrowed_items": T.Nested("*.borrowed_movie_list", {
+            	"*.type": "movie",
+            	"*.title": T.Rename("*.name")
+            })
+        }
+    }
+    ```
 
 
 TODO
