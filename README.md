@@ -78,7 +78,7 @@ Features
 
 * It supports default value for newly added key-value pair.
 
-    ```js
+    ```javascript
     {
         from: {"version": 2},
         to: {"version": 3},
@@ -90,12 +90,12 @@ Features
    
 * It supports inline transformation in Javascript.
 
-	```js
+	```javascript
 	{
         from: {"version": 2},
         to: {"version": 3},
         mapping: {
-            ""new_name": function (o) {
+            "new_name": function (o) {
             	return "name_" + o.toUpperCase();
             }
         }
@@ -116,7 +116,7 @@ Features
 
 * You can add `version` field in later version. So that you can use this library on older projects.
 
-	```js
+	```javascript
 	{
         from: null,
         to: {"version": 3},
@@ -128,7 +128,7 @@ Features
 
 * You can use different method to determine the version.
 
-	```js
+	```javascript
 	{
         from: {"v": "2"},
         to: {"version": 3}
@@ -137,7 +137,7 @@ Features
 
 	or even...
 	
-	```js
+	```javascript
 	{
 		from: {"v1": function (json) { return "full_name" in json; },
 		to: {"version": 2}
@@ -146,11 +146,13 @@ Features
 
 * Multilingual ;-)
 
-	```js
+	```objectivec
 	// Objective-C
 	NSDictionary *newJSONConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
 	                                             migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+	```
 
+	```javascript
 	// Javascript
 	var newJSON = JCReader.read(oldJSONContent, migrationPlan);
 	```
@@ -158,7 +160,7 @@ Features
 
 * It supports identity transform (do nothing).
 
-	```js
+	```javascript
 	{
         from: {"version": 2},
         to: {"version": 3},
@@ -167,7 +169,7 @@ Features
 
 * It can prevent the new config from inheriting old value.
 
-	```js
+	```javascript
 	{
 		from: {"version": 2},
         to: {"version": 3},
@@ -220,23 +222,41 @@ Features
 	]
 	```
 	
-	```js
+	```javascript
 	// migration.js
 	{
 		from: {"version": 2},
         to: {"version": 3},
         mapping: {
-            "*.borrowed_items": T.Nested("*.borrowed_movie_list", {
+            "*.borrowed_items": T.Rename("*.borrowed_movie_list", {
             	"*.type": "movie",
             	"*.title": T.Rename("*.name")
             })
         }
     }
     ```
+    
+    It is equivalent to this migration script:
+    ```javascript
+	// migration-2.js
+	{
+		from: {"version": 2},
+        to: {"version": 3},
+        mapping: {
+        	"*.borrowed_items": T.Rename("*.borrowed_movie_list"),
+            "*.borrowed_items.*.type": "movie",
+           	"*.borrowed_items.*.title": T.Rename("*.borrowed_items.*.name")
+        }
+    }
+    ```
 
+Design
+======
 
-TODO
-====
+- TODO: ///
+
+What's next
+===========
 
 - implement everything ;-)
 
