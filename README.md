@@ -48,7 +48,7 @@ Migration Plan `migration.js`
     {
         from: null,
         to: {version: 2},
-        mapping: {
+        mappings: {
             "id": T.Convert("id", "string"),
             "first_name": T.Rename("full_name"),
             "last_name": null
@@ -57,7 +57,7 @@ Migration Plan `migration.js`
     {
         from: {version: 2},
         to: {version: 3},
-        mapping: {
+        mappings: {
             "email": null,    // for old config, set to null as default value
             "age": T.Drop(),  // remove the key-value pair
         }
@@ -68,9 +68,18 @@ Migration Plan `migration.js`
 Then you can load the config in latest format no matter what version the config is.
 
 ```objectivec
-// Objective-C
+// (Objective-C) Code that loads version 1 of the config.
 NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
                                           migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+                                          
+// What you read...
+{
+	"id": "5",
+    "version": 3,
+    "first_name": "Harmony Kim",
+    "last_name": null,
+    "email": null
+}
 ```
 
 Features
@@ -82,7 +91,7 @@ Features
     {
         from: {"version": 2},
         to: {"version": 3},
-        mapping: {
+        mappings: {
             "new_key": "any default value you like"
         }
     }
@@ -94,7 +103,7 @@ Features
 	{
         from: {"version": 2},
         to: {"version": 3},
-        mapping: {
+        mappings: {
             "new_name": function (o) {
             	return "name_" + o.toUpperCase();
             }
@@ -108,7 +117,7 @@ Features
 	{
         from: {"version": 2},
         to: {"version": 3},
-        mapping: {
+        mappings: {
             "emails": T.Convert("email", "array")
         }
     }
@@ -120,7 +129,7 @@ Features
 	{
         from: null,
         to: {"version": 3},
-        mapping: {
+        mappings: {
             // ...
         }
     }
@@ -174,7 +183,7 @@ Features
 		from: {"version": 2},
         to: {"version": 3},
         inheritItems: false,   // default: true
-        mapping: {
+        mappings: {
             // ...
         }
     }
@@ -227,7 +236,7 @@ Features
 	{
 		from: {"version": 2},
         to: {"version": 3},
-        mapping: {
+        mappings: {
             "*.borrowed_items": T.Rename("*.borrowed_movie_list", {
             	"*.type": "movie",
             	"*.title": T.Rename("*.name")
@@ -242,7 +251,7 @@ Features
 	{
 		from: {"version": 2},
         to: {"version": 3},
-        mapping: {
+        mappings: {
         	"*.borrowed_items": T.Rename("*.borrowed_movie_list"),
             "*.borrowed_items.*.type": "movie",
            	"*.borrowed_items.*.title": T.Rename("*.borrowed_items.*.name")
