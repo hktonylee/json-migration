@@ -21,9 +21,8 @@ Config Version 2 (`user-v2.json`)
 ```json
 {
     "id": "5",
-    "version": 2,
-    "first_name": "Harmony",
-    "last_name": "Kim",
+    "first_name": "Harmony Kim",
+    "last_name": null,
     "age": 26
 }
 ```
@@ -33,10 +32,9 @@ Config Version 3 (`user-v3.json`)
 ```json
 {
     "id": "5",
-    "version": 3,
     "first_name": "Harmony",
     "last_name": "Kim",
-    "email": "some@email.com"
+    "email": null
 }
 ```
 
@@ -59,7 +57,7 @@ Migration Plan `migration.js`
         to: {version: 3},
         mappings: {
             "email": null,    // for old config, set to null as default value
-            "age": T.Drop(),  // remove the key-value pair
+            "age": T.Drop()   // remove the key-value pair
         }
     }
 ]
@@ -75,7 +73,6 @@ NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForRes
 // What you read...
 {
 	"id": "5",
-    "version": 3,
     "first_name": "Harmony Kim",
     "last_name": null,
     "email": null

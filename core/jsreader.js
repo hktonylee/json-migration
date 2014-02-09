@@ -4,16 +4,23 @@ var T = {
     Convert: function (oldKey, newType) {
         return function (oldJSON, newJSON, newKey) {
             if (newType === "string") {
-                newJSON[newKey] = String(oldJSON[oldKey]);
+                return String(oldJSON[oldKey]);
             }
         };
     },
 
     Rename: function (oldKey) {
         return function (oldJSON, newJSON, newKey) {
-            newJSON[newKey] = newJSON[oldKey];
+            var val = newJSON[oldKey];
             delete newJSON[oldKey];
+            return val;
         };
+    },
+
+    Drop: function() {
+        return function (oldJSON, newJSON, newKey) {
+            delete newJSON[newKey];
+        }
     }
 };
 
@@ -21,17 +28,55 @@ var T = {
 
 var JCReader = (function () {
 
+    var Utility = {
+        "clone": function (obj) {
+            // Source: http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object
+            if (null == obj || "object" != typeof obj) return obj;
+
+            // Handle Date
+            if (obj instanceof Date) {
+                var copy = new Date();
+                copy.setTime(obj.getTime());
+                return copy;
+            }
+
+            // Handle Array
+            if (obj instanceof Array) {
+                var copy = [];
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    copy[i] = clone(obj[i]);
+                }
+                return copy;
+            }
+
+            // Handle Object
+            if (obj instanceof Object) {
+                var copy = {};
+                for (var attr in obj) {
+                    if (obj.hasOwnProperty(attr)) copy[attr] = Utility.clone(obj[attr]);
+                }
+                return copy;
+            }
+
+            throw new Error("Unable to copy obj! Its type isn't supported.");
+        }
+    };
+
+
     function JCMigrator (mappings) {
         this._mappings = mappings;
     };
 
     JCMigrator.prototype.migrate = function(oldJSONContent) {
-        var newJSONContent = oldJSONContent;
+        var newJSONContent = Utility.clone(oldJSONContent);
         for (var newKey in this._mappings) {
             var mappingRule = this._mappings[newKey];
             var mappingRuleType = typeof mappingRule;
             if (mappingRuleType === "function") {
-                mappingRule(oldJSONContent, newJSONContent, newKey);
+                var val = mappingRule(oldJSONContent, newJSONContent, newKey);
+                if (typeof val !== "undefined") {
+                    newJSONContent[newKey] = val;
+                }
             } else {
                 newJSONContent[newKey] = mappingRule;
             }
@@ -41,7 +86,12 @@ var JCReader = (function () {
 
     return {
         'read': function (oldJSONContent, migrationPlan) {
-            var migrator = new JCMigrator(migrationPlan[0].mappings);
+
+            var mappings = (typeof migrationPlan === "array"
+                            ? migrationPlan[0].mappings
+                            : migrationPlan.mappings);
+
+            var migrator = new JCMigrator(mappings);
             return migrator.migrate(oldJSONContent);
         }
     };
