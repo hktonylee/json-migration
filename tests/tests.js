@@ -1,7 +1,7 @@
 
 
-function jcOK(oldJSONContent, migrationPlan, expectedNewJSONContent) {
-    var actualResult = JCReader.read(oldJSONContent, migrationPlan);
+function jsrOK(oldJSONContent, migrationPlan, expectedNewJSONContent) {
+    var actualResult = JSReader.read(oldJSONContent, migrationPlan);
 
     // console.log("Expected", expectedNewJSONContent);
     // console.log("Actual", actualResult);
@@ -33,7 +33,7 @@ test("Example 1.1", function () {
         "age": 26
     };
 
-    jcOK(oldJSONContent, migrationPlan, expectedNewJSONContent);
+    jsrOK(oldJSONContent, migrationPlan, expectedNewJSONContent);
 });
 
 
@@ -71,7 +71,7 @@ test("Example 1.2", function () {
         "email": null
     };
 
-    jcOK(oldJSONContent, migrationPlan, expectedNewJSONContent);
+    jsrOK(oldJSONContent, migrationPlan, expectedNewJSONContent);
 });
 
 

@@ -26,7 +26,7 @@ var T = {
 
 
 
-var JCReader = (function () {
+var JSReader = (function () {
 
     var Utility = {
         "clone": function (obj) {
@@ -63,11 +63,11 @@ var JCReader = (function () {
     };
 
 
-    function JCMigrator (mappings) {
+    function JSMigrator (mappings) {
         this._mappings = mappings;
     };
 
-    JCMigrator.prototype.migrate = function(oldJSONContent) {
+    JSMigrator.prototype.migrate = function(oldJSONContent) {
         var newJSONContent = Utility.clone(oldJSONContent);
         for (var newKey in this._mappings) {
             var mappingRule = this._mappings[newKey];
@@ -91,7 +91,7 @@ var JCReader = (function () {
                             ? migrationPlan[0].mappings
                             : migrationPlan.mappings);
 
-            var migrator = new JCMigrator(mappings);
+            var migrator = new JSMigrator(mappings);
             return migrator.migrate(oldJSONContent);
         }
     };

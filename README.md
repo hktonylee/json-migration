@@ -67,7 +67,7 @@ Then you can load the config in latest format no matter what version the config 
 
 ```objectivec
 // (Objective-C) Code that loads version 1 of the config.
-NSDictionary *userConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+NSDictionary *userConfig = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
                                           migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
                                           
 // What you read...
@@ -154,13 +154,13 @@ Features
 
 	```objectivec
 	// Objective-C
-	NSDictionary *newJSONConfig = [JCReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+	NSDictionary *newJSONConfig = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
 	                                             migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
 	```
 
 	```javascript
 	// Javascript
-	var newJSON = JCReader.read(oldJSONContent, migrationPlan);
+	var newJSON = JSReader.read(oldJSONContent, migrationPlan);
 	```
 
 
