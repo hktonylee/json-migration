@@ -1,12 +1,12 @@
-json-config
+json-reader
 ===========
 
-`JSONConfig` is a JSON config reader. You can write migration plan and read old config easily.
+`JSONReader` is a JSON reader. You can write migration plan and read old json easily. So that you may use it to read old json config, NoSQL or whatever.
 
 Example
 -------
 
-Config Version 1 (`user.json`)
+JSON Version 1 (`user.json`)
 
 ```json
 {
@@ -16,7 +16,7 @@ Config Version 1 (`user.json`)
 }
 ```
 
-Config Version 2 (`user-v2.json`)
+JSON Version 2 (`user-v2.json`)
 
 ```json
 {
@@ -27,7 +27,7 @@ Config Version 2 (`user-v2.json`)
 }
 ```
 
-Config Version 3 (`user-v3.json`)
+JSON Version 3 (`user-v3.json`)
 
 ```json
 {
@@ -56,19 +56,19 @@ Migration Plan `migration.js`
         from: {version: 2},
         to: {version: 3},
         mappings: {
-            "email": null,    // for old config, set to null as default value
+            "email": null,    // for old json, set to null as default value
             "age": T.Drop()   // remove the key-value pair
         }
     }
 ]
 ```
 
-Then you can load the config in latest format no matter what version the config is.
+Then you can load the json in latest format no matter what version the json is.
 
 ```objectivec
-// (Objective-C) Code that loads version 1 of the config.
-NSDictionary *userConfig = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
-                                          migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+// (Objective-C) Code that loads version 1 of the json.
+NSDictionary *userJSON = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+                                        migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
                                           
 // What you read...
 {
@@ -154,8 +154,8 @@ Features
 
 	```objectivec
 	// Objective-C
-	NSDictionary *newJSONConfig = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
-	                                             migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+	NSDictionary *newJSON = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
+	                                       migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
 	```
 
 	```javascript
@@ -173,7 +173,7 @@ Features
     }
     ```
 
-* It can prevent the new config from inheriting old value.
+* It can prevent the new json from inheriting old value.
 
 	```javascript
 	{
@@ -188,7 +188,7 @@ Features
 
 * It supports nested array migration.
 
-	Old version config
+	Old version JSON
 	```json
 	[
 		{
@@ -207,7 +207,7 @@ Features
 	]
 	```
 	
-	New version config
+	New version JSON
 	```json
 	[
 		{
