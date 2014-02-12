@@ -63,7 +63,7 @@ var JSReader = (function () {
     };
 
 
-    function JSMigrator (mappings) {
+    function JSMigrator (from, to, mappings) {
         this._mappings = mappings;
     };
 
@@ -91,7 +91,7 @@ var JSReader = (function () {
                             ? migrationPlan[0].mappings
                             : migrationPlan.mappings);
 
-            var migrator = new JSMigrator(mappings);
+            var migrator = new JSMigrator(null, null, mappings);
             return migrator.migrate(oldJSONContent);
         }
     };
