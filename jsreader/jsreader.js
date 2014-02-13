@@ -59,6 +59,18 @@ var JSReader = (function () {
             }
 
             throw new Error("Unable to copy obj! Its type isn't supported.");
+        },
+
+        "fastHash": function (key, value) {
+            key = key.replace("~", "~~");
+            var type = typeof value;
+            if (type === "number") {
+                return key + "~n" + value;
+            } else if (type === "string") {
+                return key + "~s" + value.replace(",", "~~");
+            } else {
+                throw "Version value should be either number or string.";
+            }
         }
     };
 
@@ -85,14 +97,14 @@ var JSReader = (function () {
     };
 
     return {
-        'read': function (oldJSONContent, migrationPlan) {
+        'read': function (oldJSONContent, migrationPlan, targetVersion) {
 
             var mappings = (typeof migrationPlan === "array"
                             ? migrationPlan[0].mappings
                             : migrationPlan.mappings);
 
             var migrator = new JSMigrator(null, null, mappings);
-            return migrator.migrate(oldJSONContent);
+            return migrator.migrate(oldJSONContent, targetVersion);
         }
     };
 

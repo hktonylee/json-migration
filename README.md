@@ -1,7 +1,7 @@
 json-reader
 ===========
 
-`JSONReader` is a JSON reader. You can write migration plan and read old json easily. So that you may use it to read old json config, NoSQL or whatever.
+`JSONReader` is a JSON reader that support a smart way to migrate JSON (or JavaScript object). You can write migration plan and read old json easily. So that you may use it to read old json config, NoSQL entity or whatever.
 
 Example
 -------
@@ -12,7 +12,7 @@ JSON Version 1 (`user.json`)
 {
     "id": 5,
     "full_name": "Harmony Kim",
-    "age": 26,
+    "age": 26
 }
 ```
 
@@ -67,8 +67,8 @@ Then you can load the json in latest format no matter what version the json is.
 
 ```objectivec
 // (Objective-C) Code that loads version 1 of the json.
-NSDictionary *userJSON = [JSReader dictionaryWithJSONPath:[NSBundle pathForResource:"user" ofType:@"json"] 
-                                        migrationPlanPath:[NSBundle pathForResource:"migration" ofType:@"js"]];
+NSDictionary *userJSON = [JSReader dictionaryWithJSONPath:[[NSBundle mainBundle] pathForResource:"user" ofType:@"json"] 
+                                        migrationPlanPath:[[NSBundle mainBundle] pathForResource:"migration" ofType:@"js"]];
                                           
 // What you read...
 {
@@ -145,7 +145,7 @@ Features
 	
 	```javascript
 	{
-		from: {"v1": function (json) { return "full_name" in json; },
+		from: {"v1": function (json) { return "full_name" in json; }},
 		to: {"version": 2}
 	}
 	```
@@ -169,7 +169,7 @@ Features
 	```javascript
 	{
         from: {"version": 2},
-        to: {"version": 3},
+        to: {"version": 3}
     }
     ```
 
@@ -233,7 +233,7 @@ Features
 	{
 		from: {"version": 2},
         to: {"version": 3},
-        mappings: {
+        array_mappings: {
             "*.borrowed_items": T.Rename("*.borrowed_movie_list", {
             	"*.type": "movie",
             	"*.title": T.Rename("*.name")
@@ -248,7 +248,7 @@ Features
 	{
 		from: {"version": 2},
         to: {"version": 3},
-        mappings: {
+        array_mappings: {
         	"*.borrowed_items": T.Rename("*.borrowed_movie_list"),
             "*.borrowed_items.*.type": "movie",
            	"*.borrowed_items.*.title": T.Rename("*.borrowed_items.*.name")
